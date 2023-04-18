@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto</title>
+</head>
+<body>
+
+  <h1>Registro de Proyecto :v</h1>
+
+  <form method="POST" action="{{ url_for('registroValues') }}">
+    <label for="txtNombre">¿Qué desea hacer?</label>
+    <br>
+    <input type="submit" name="accion" value="registrar">
+    <input type="submit" name="accion" value="consultar">
+    <br>
+    <a href="/">
+      <input type="button" name="" id="" value="Back to Home">
+    </a>
+    <button formaction="/">Back 2</button>
+  </form>
+
+</body>
+</html>
