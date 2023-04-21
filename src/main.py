@@ -10,18 +10,22 @@ def index():
 def registro():
     return render_template('formulario_proyecto.html ')
 
-@app.route('/consultar')
+@app.route('/consultar', methods=['POST'])
 def consultar():
     return render_template('consultar.html')
 
 @app.route('/registro/values', methods=['POST'])
 def registroValues():
-    accion = request.form['accion']
+    return render_template('registro_proyecto.html')
+    """accion = request.form['accion']
     if accion == 'registrar':
         return render_template('registro_proyecto.html')
     else:
-        return redirect(url_for('consultar'))
+        return redirect(url_for('consultar'))"""
     
+@app.route('/registro/frentes', methods=['POST'])
+def registroFrentes():
+    return render_template('frentes_obra.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000, debug=True)

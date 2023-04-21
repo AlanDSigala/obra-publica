@@ -8,18 +8,22 @@
 </head>
 <body>
 
-  <h1>Registro de Proyecto :v</h1>
+  <h1>Registro de Proyecto</h1>
 
-  <form method="POST" action="{{ url_for('registroValues') }}">
+  <form method="POST">
     <label for="txtNombre">¿Qué desea hacer?</label>
     <br>
-    <input type="submit" name="accion" value="registrar">
-    <input type="submit" name="accion" value="consultar">
+    <input type="submit" name="accion" value="registrar" formaction="{{ url_for('registroValues') }}">
+    <input type="submit" name="accion" value="consultar" formaction="{{ url_for('consultar') }}">
     <br>
     <a href="/">
       <input type="button" name="" id="" value="Back to Home">
     </a>
-    <button formaction="/">Back 2</button>
+  </form>
+  <form>
+    <a href="{{ url_for('index') }}">
+      <input type="button" value="inicio">
+    </a>
   </form>
 
 </body>
