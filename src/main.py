@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from models import *
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/obra.db'
+db = SQLAlchemy(app)
+
 
 @app.route('/')
 def index():
@@ -29,7 +34,3 @@ def registroFrentes():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000, debug=True)
-
-    """name = request.form['txtNombre']
-    print(name)
-    return redirect(url_for('index'))"""

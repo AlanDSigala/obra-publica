@@ -1,41 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frentes de obra</title>
-</head>
-<body>
-    <h1>Registro de frentes de obra</h1>
+{% extends 'base.html' %}
 
-    <form method="POST">
-        <div class="form-group">
-          <label for="nombre">Nombre del frente:</label>
-          <input type="text" id="nombre" name="nombre" class="form-control" required>
-        </div>
-      
-        <div class="form-group">
-          <label for="descripcion">Descripción del frente:</label>
-          <textarea id="descripcion" name="descripcion" class="form-control" required></textarea>
-        </div>
-      
-        <div class="form-group">
-          <label for="fecha_inicio">Fecha de inicio:</label>
-          <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" required>
-        </div>
+{% block title %}Registro Frentes de obra{% endblock %}
 
-        <div class="form-group">
-            <label for="no_contrato">Numero de contrato:</label>
-            <input type="text" id="no_contrato" name="no_contrato" class="form-control" required>
-          </div>
-    
-        <div class="form-group">
-          <label for="fecha_fin">Fecha de fin:</label>
-          <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" required>
-        </div>
-    
-        <input type="submit" name="accion" value="Registar frente" formaction="{{ url_for('registroFrentes') }}">
-      </form>
-</body>
-</html>
+{% block content %}
+<h1>Registro de frentes de obra</h1>
+
+<form method="POST">
+    <div class="form-group">
+      <label for="nombre">Nombre del frente:</label>
+      <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+  
+    <div class="form-group">
+      <label for="descripcion">Descripción del frente:</label>
+      <textarea id="descripcion" name="descripcion" class="form-control" required></textarea>
+    </div>
+  
+    <div class="form-group">
+      <label for="fecha_inicio">Fecha de inicio:</label>
+      <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="no_contrato">Numero de contrato:</label>
+        <input type="text" id="no_contrato" name="no_contrato" class="form-control" required>
+      </div>
+
+    <div class="form-group">
+      <label for="fecha_fin">Fecha de fin:</label>
+      <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" required>
+    </div>
+
+    <input type="submit" name="accion" value="Registar frente" formaction="{{ url_for('registroFrentes') }}">
+  </form>
+{% endblock %}

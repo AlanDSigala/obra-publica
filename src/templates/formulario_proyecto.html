@@ -1,30 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proyecto</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-  <h1>Registro de Proyecto</h1>
+{% block title %}Proyecto{% endblock %}
 
-  <form method="POST">
-    <label for="txtNombre">¿Qué desea hacer?</label>
-    <br>
-    <input type="submit" name="accion" value="registrar" formaction="{{ url_for('registroValues') }}">
-    <input type="submit" name="accion" value="consultar" formaction="{{ url_for('consultar') }}">
-    <br>
-    <a href="/">
-      <input type="button" name="" id="" value="Back to Home">
-    </a>
-  </form>
-  <form>
-    <a href="{{ url_for('index') }}">
-      <input type="button" value="inicio">
-    </a>
-  </form>
+{% block content %}
+<h1>Registro o consulta de Proyecto</h1>
 
-</body>
-</html>
+<form method="POST">
+  <label for="txtNombre">¿Qué desea hacer?</label>
+  <br>
+  <input type="submit" name="accion" value="registrar" formaction="{{ url_for('registroValues') }}">
+  <input type="submit" name="accion" value="consultar" formaction="{{ url_for('consultar') }}">
+  <br>
+</form>
+{% endblock %}
