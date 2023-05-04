@@ -1,10 +1,15 @@
+from models import Proyecto
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from models import *
+
+
+
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/obra.db'
 db = SQLAlchemy(app)
+db.create_all()
 
 
 @app.route('/')
@@ -21,12 +26,14 @@ def consultar():
 
 @app.route('/registro/values', methods=['POST'])
 def registroValues():
+    proyecto = Proyecto(nombre=request.form['nombre'], 
+    descripcion=request.form['descripcion'],
+    fecha_inicio=request.form['fecha_inicio'],
+    fecha_final=request.form['fecha_final'])
+    #db.session.add(proyecto)
+    #db.session.commit()
     return render_template('registro_proyecto.html')
-    """accion = request.form['accion']
-    if accion == 'registrar':
-        return render_template('registro_proyecto.html')
-    else:
-        return redirect(url_for('consultar'))"""
+
     
 @app.route('/registro/frentes', methods=['POST'])
 def registroFrentes():
