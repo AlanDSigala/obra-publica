@@ -1,5 +1,5 @@
 
-from main import db 
+from database import db 
 
 
 class Proyecto(db.Model):
