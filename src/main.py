@@ -35,18 +35,30 @@ def procesarRegistroProyecto():
     fecha_inicio = request.form.get('fecha_inicio')
     fecha_final = request.form.get('fecha_final')
 
+    print(f'nombre: {nombre}')
+    print(f'descripcion: {descripcion}')
+    print(f'fecha_inicio: {fecha_inicio}')
+    print(f'fecha_final: {fecha_final}')
+    print(f'hola')
+
+
     # guardar los datos en la base de datos
     proyecto = Proyecto(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, fecha_final=fecha_final)
     db.session.add(proyecto)
     db.session.commit()
 
     # redirigir al usuario a la página que muestra el formulario
-    return redirect(url_for('registroProyecto'))
+    return redirect(url_for('registroFrentes', proyecto_id=proyecto.id))
 
     
-@app.route('/registro/frentes', methods=['POST'])
-def registroFrentes():
-    return render_template('frentes_obra.html')
+@app.route('/registro/frentes/<int:proyecto_id>')
+def registroFrentes(proyecto_id):
+    proyecto = Proyecto.query.get(proyecto_id)
+
+    if proyecto is None:
+        return redirect(url_for('consultar'))
+
+    return render_template('frentes_obra.html', proyecto=proyecto)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000, debug=True)
