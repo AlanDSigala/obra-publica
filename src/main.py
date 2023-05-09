@@ -1,6 +1,7 @@
 from models.proyecto import Proyecto
 from flask import Flask, render_template, request, redirect, url_for
 from database import db
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///obra.db'
@@ -28,12 +29,12 @@ def registroProyecto():
     return render_template('registro_proyecto.html')
 
 # función que procesa los datos del formulario
-@app.route('/registro/proyecto', methods=['POST'])
+@app.route('/registro/proyecto1', methods=['POST'])
 def procesarRegistroProyecto():
     nombre = request.form.get('nombre')
     descripcion = request.form.get('descripcion')
-    fecha_inicio = request.form.get('fecha_inicio')
-    fecha_final = request.form.get('fecha_final')
+    fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
+    fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
 
     print(f'nombre: {nombre}')
     print(f'descripcion: {descripcion}')
@@ -46,7 +47,6 @@ def procesarRegistroProyecto():
     proyecto = Proyecto(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, fecha_final=fecha_final)
     db.session.add(proyecto)
     db.session.commit()
-
     # redirigir al usuario a la página que muestra el formulario
     return redirect(url_for('registroFrentes', proyecto_id=proyecto.id))
 
