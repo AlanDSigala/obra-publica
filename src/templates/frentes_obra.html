@@ -30,7 +30,14 @@
       <label for="fecha_fin">Fecha de fin:</label>
       <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" required>
     </div>
+    
+    <label for="proyecto">Proyecto asociado:</label>
+    <select name="proyecto">
+      {% for proyecto in proyectos %}
+        <option value="{{ proyecto.id }}">{{ proyecto.nombre }}</option>
+      {% endfor %}
+    </select><br>
 
-    <input type="submit" name="accion" value="Registar frente" formaction="{{ url_for('registroFrentes') }}">
+    <input type="submit" name="accion" value="Registar frente" formaction="/registro/frentes">
   </form>
 {% endblock %}

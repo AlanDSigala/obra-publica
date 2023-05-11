@@ -1,5 +1,5 @@
 from models.proyecto import Proyecto
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, session, url_for
 from database import db
 from datetime import datetime
 
@@ -36,13 +36,6 @@ def procesarRegistroProyecto():
     fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
     fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
 
-    print(f'nombre: {nombre}')
-    print(f'descripcion: {descripcion}')
-    print(f'fecha_inicio: {fecha_inicio}')
-    print(f'fecha_final: {fecha_final}')
-    print(f'hola')
-
-
     # guardar los datos en la base de datos
     proyecto = Proyecto(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, fecha_final=fecha_final)
     db.session.add(proyecto)
@@ -51,14 +44,33 @@ def procesarRegistroProyecto():
     return redirect(url_for('registroFrentes', proyecto_id=proyecto.id))
 
     
-@app.route('/registro/frentes/<int:proyecto_id>')
-def registroFrentes(proyecto_id):
-    proyecto = Proyecto.query.get(proyecto_id)
+@app.route('/registro/frentes')
+def registroFrentes():
+    proyectos = session.query(Proyecto).all()
+    return render_template('frentes_obra.html', proyectos=proyectos)
 
-    if proyecto is None:
-        return redirect(url_for('consultar'))
 
-    return render_template('frentes_obra.html', proyecto=proyecto)
+@app.route('/proyectos')
+def listar_proyectos():
+    proyectos = Proyecto.query.all()
+    return render_template('proyectos.html', proyectos=proyectos)
+
+@app.route('/registro/frentes/1')
+def procesarRegistrarFrentre():
+    proyecto_id = request.form.get('proyecto_id')
+    proyecto = session.query(Proyecto).get(proyecto_id)
+
+    nombre = request.form.get('nombre')
+    descripcion = request.form.get('descripcion')
+    fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
+    no_contrato = request.form.get('no_contrato')
+    fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
+    proyecto_asociado = request.form.get('proyecto')  
+    # guardar los datos en la base de datos
+    proyecto = Proyecto(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, fecha_final=fecha_final)
+    db.session.add(proyecto)
+    db.session.commit()
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000, debug=True)

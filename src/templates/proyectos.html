@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro de proyecto{% endblock %}
+
+{% block content %}
+<h1>Proyectos registrados</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Fecha de inicio</th>
+      <th>Fecha de fin</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for proyecto in proyectos %}
+    <tr>
+      <td>{{ proyecto.nombre }}</td>
+      <td>{{ proyecto.descripcion }}</td>
+      <td>{{ proyecto.fecha_inicio }}</td>
+      <td>{{ proyecto.fecha_final }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
