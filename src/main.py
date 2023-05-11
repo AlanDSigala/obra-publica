@@ -1,4 +1,5 @@
 from models.proyecto import Proyecto
+from models.frente import Frente
 from flask import Flask, render_template, request, redirect, session, url_for
 from database import db
 from datetime import datetime
@@ -46,7 +47,7 @@ def procesarRegistroProyecto():
     
 @app.route('/registro/frentes')
 def registroFrentes():
-    proyectos = session.query(Proyecto).all()
+    proyectos = db.session.query(Proyecto).all()
     return render_template('frentes_obra.html', proyectos=proyectos)
 
 
@@ -67,8 +68,8 @@ def procesarRegistrarFrentre():
     fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
     proyecto_asociado = request.form.get('proyecto')  
     # guardar los datos en la base de datos
-    proyecto = Proyecto(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, fecha_final=fecha_final)
-    db.session.add(proyecto)
+    frente = Frente(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, no_contrato=no_contrato, fecha_final=fecha_final, proyecto_id= proyecto_asociado)
+    db.session.add(frente)
     db.session.commit()
 
 
