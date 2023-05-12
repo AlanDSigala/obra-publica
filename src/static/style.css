@@ -1,23 +1,21 @@
 /* Estilos para la barra de navegación */
 .navbar {
-    background-color: #89b3de; /* color de fondo de la barra de navegación */
-    overflow: hidden;
-    padding: 10px 15px; /* espacio de relleno interno de la barra de navegación */
-    border-radius: 5px; /* esquinas redondeadas de la barra de navegación */
-  }
-  
-  /* Estilos para los enlaces de la barra de navegación */
-  .navbar a {
-    float: left; /* para que los elementos se acomoden en la barra */
-    color: black; /* color de texto */
-    text-align: center; /* alinear texto al centro */
-    padding: 14px 16px; /* agregar espaciado alrededor del texto */
-    text-decoration: none; /* quitar subrayado */
-    font-size: 17px; /* tamaño de fuente */
-  }
-  
-  /* Estilos para los enlaces activos de la barra de navegación */
-  .navbar a.active {
-    background-color: #333; /* color de fondo para el enlace activo de la barra de navegación */
-    color: #fff; /* color de texto para el enlace activo de la barra de navegación */
-  }
+  background-color: #89b3de; /* color de fondo de la barra de navegación */
+  border-radius: 5px; /* esquinas redondeadas de la barra de navegación */
+}
+
+/* Estilos para los enlaces de la barra de navegación */
+.navbar a {
+  display: inline-block; /* para que los elementos se acomoden en línea */
+  color: black; /* color de texto */
+  text-align: center; /* alinear texto al centro */
+  padding: 14px 16px; /* agregar espaciado alrededor del texto */
+  text-decoration: none; /* quitar subrayado */
+  font-size: 17px; /* tamaño de fuente */
+}
+
+/* Estilos para los enlaces activos de la barra de navegación */
+.navbar a.active {
+  background-color: #333; /* color de fondo para el enlace activo de la barra de navegación */
+  color: #fff; /* color de texto para el enlace activo de la barra de navegación */
+}

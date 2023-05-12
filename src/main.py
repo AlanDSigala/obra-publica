@@ -56,22 +56,29 @@ def listar_proyectos():
     proyectos = Proyecto.query.all()
     return render_template('proyectos.html', proyectos=proyectos)
 
-@app.route('/registro/frentes/1')
+
+@app.route('/registro/frentes/1', methods=['POST'])
 def procesarRegistrarFrentre():
     proyecto_id = request.form.get('proyecto_id')
-    proyecto = session.query(Proyecto).get(proyecto_id)
+    proyecto = Proyecto.query.filter_by(id=proyecto_id).first()
 
     nombre = request.form.get('nombre')
     descripcion = request.form.get('descripcion')
     fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
     no_contrato = request.form.get('no_contrato')
     fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
-    proyecto_asociado = request.form.get('proyecto')  
+ 
     # guardar los datos en la base de datos
-    frente = Frente(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, no_contrato=no_contrato, fecha_final=fecha_final, proyecto_id= proyecto_asociado)
+    frente = Frente(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, no_contrato=no_contrato, fecha_final=fecha_final, proyecto_id= proyecto_id)
     db.session.add(frente)
     db.session.commit()
+    return redirect(url_for('detalles_proyecto', id=proyecto.id))
 
+@app.route('/proyecto/detalles/<int:id>')
+def detalles_proyecto(id):
+    proyecto = Proyecto.query.get(id)
+    frentes = Frente.query.filter_by(proyecto_id=proyecto.id).all()
+    return render_template('detalle_proyecto.html', proyecto=proyecto, frentes=frentes)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000, debug=True)

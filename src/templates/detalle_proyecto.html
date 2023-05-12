@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de proyecto{% endblock %}
+
+{% block content %}
+<h1>{{ proyecto.nombre }}</h1>
+<p>{{ proyecto.descripcion }}</p>
+<p>Fecha de inicio: {{ proyecto.fecha_inicio }}</p>
+<p>Fecha final: {{ proyecto.fecha_final }}</p>
+
+<h2>Frentes de obra</h2>
+<ul>
+  {% for frente in proyecto.frentes %}
+  <li>{{ frente.nombre }}</li>
+  {% endfor %}
+</ul>
+
+<a href="/registro/frentes" class="btn btn-primary">Agregar frente de obra</a>
+{% endblock %}

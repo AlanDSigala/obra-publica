@@ -27,17 +27,17 @@
       </div>
 
     <div class="form-group">
-      <label for="fecha_fin">Fecha de fin:</label>
-      <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" required>
+      <label for="fecha_final">Fecha de fin:</label>
+      <input type="date" id="fecha_final" name="fecha_final" class="form-control" required>
     </div>
     
-    <label for="proyecto">Proyecto asociado:</label>
-    <select name="proyecto">
+    <label for="proyecto_id">Proyecto asociado:</label>
+    <select name="proyecto_id">
       {% for proyecto in proyectos %}
         <option value="{{ proyecto.id }}">{{ proyecto.nombre }}</option>
       {% endfor %}
     </select><br>
 
-    <input type="submit" name="accion" value="Registar frente" formaction="/registro/frentes1">
+    <input type="submit" name="accion" value="Registar frente" formaction="/registro/frentes/1">
   </form>
 {% endblock %}
