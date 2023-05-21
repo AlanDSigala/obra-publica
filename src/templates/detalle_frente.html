@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de Frente{% endblock %}
+
+{% block content %}
+<h1>{{ frente.nombre }}</h1>
+<p>{{ frente.descripcion }}</p>
+<p>Fecha de inicio: {{ frente.fecha_inicio }}</p>
+<p>Fecha final: {{ frente.fecha_final }}</p>
+<p>Numero de contrato: {{ frente.no_contrato}}</p>
+<p>Proyecto asociado: {{ frente.proyecto.nombre }}</p>
+
+<h2>Catalogo de Conceptos</h2>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Clave</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Unidad</th>
+        <th>Costo Unitario</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for concepto in frente.catalogos_relacionados%}
+        <tr>
+          <td>{{ concepto.clave }}</td>
+          <td>{{ concepto.nombre }}</td>
+          <td>{{ concepto.descripcion }}</td>
+          <td>{{ concepto.unidad }}</td>
+          <td>{{ concepto.costo_unitario }}</td>
+          <td>{{ concepto.cantidad }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<a href="/registro/frentes" class="btn btn-primary">Editar catalogo de Conceptos</a>
+{% endblock %}

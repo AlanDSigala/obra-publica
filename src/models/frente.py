@@ -9,3 +9,4 @@ class Frente(db.Model):
     fecha_final = db.Column(db.Date, nullable=False)
     proyecto_id = db.Column(db.Integer, db.ForeignKey('proyecto.id'), nullable=False)
     proyecto = db.relationship('Proyecto', backref=db.backref('frentes', lazy=True))
+    catalogos_relacionados = db.relationship('Catalogo', backref='frente', lazy=True)

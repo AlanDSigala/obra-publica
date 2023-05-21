@@ -11,7 +11,10 @@
 <h2>Frentes de obra</h2>
 <ul>
   {% for frente in proyecto.frentes %}
-  <li>{{ frente.nombre }}</li>
+  <li>
+    <a href="/proyecto/detalles/{{ proyecto.id}}/frente/{{ frente.id}}">{{ frente.nombre }}</a>
+    <a href="/proyecto/{{ proyecto.id }}/frente/{{ frente.id}}/editar" class="btn btn-primary btn-sm">Editar</a>
+  </li>
   {% endfor %}
 </ul>
 
