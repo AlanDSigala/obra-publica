@@ -101,10 +101,10 @@ def gestionar_catalogo(frente_id):
         unidad = request.form.get('unidad')
         costo = request.form.get('costo')
         cantidad = request.form.get('cantidad')
-        
+        importe = float(costo) * float(cantidad)
     
         # guardar los datos en la base de datos
-        catalogo = Catalogo(clave=clave, nombre=nombre, descripcion=descripcion, unidad=unidad, costo_unitario=costo, cantidad=cantidad, frente_id=frente_id)
+        catalogo = Catalogo(clave=clave, nombre=nombre, descripcion=descripcion, unidad=unidad, costo_unitario=costo, cantidad=cantidad,importe=importe, frente_id=frente_id)
         db.session.add(catalogo)
         db.session.commit()
 
