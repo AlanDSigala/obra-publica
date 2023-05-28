@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro de proyecto{% endblock %}
+
+{% block content %}
+<h1>Empresas registrados</h1>
+<div class="table-resposive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Razon social</th>
+        <th>RFC</th>
+        <th>Numero de registro IVA</th>
+        <th>Numero de registro CMIC</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for empresa in empresas %}
+      <tr>
+        <td>{{ empresa.nombre }}</td>
+        <td>{{ empresa.razon_social }}</td>
+        <td>{{ empresa.rfc }}</td>
+        <td>{{ empresa.numero_iva }}</td>
+        <td>{{ empresa.cmic }}</td>
+        <td><a href="" class="btn btn-danger btn-sm">Editar</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="/registro/empresa" class="btn btn-outline-warning btn-sm">Registrar Empresa</a>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro Empresas{% endblock %}
+
+{% block content %}
+<h1>Registro Empresas Asociadas</h1>
+
+<form method="POST">
+    <div class="form-group">
+      <label for="nombre">Nombre de la empresa:</label>
+      <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+  
+    <div class="form-group">
+        <label for="razon">Razon Social:</label>
+        <input type="text" id="razon" name="razon" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="rfc">Registro Federal de Contribuyentes:</label>
+        <input type="text" id="rfc" name="rfc" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="no_iva">Numero de Registro IVA:</label>
+        <input type="text" id="no_iva" name="no_iva" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cmic">Numero de registro CMIC:</label>
+        <input type="text" id="cmic" name="cmic" class="form-control" required>
+      </div>
+
+
+    <input type="submit" name="accion" value="Registar empresa" formaction="/empresas">
+  </form>
+{% endblock %}

@@ -1,3 +1,4 @@
+from models.empresa import Empresa
 from models.proyecto import Proyecto
 from models.frente import Frente
 from models.catalogo import Catalogo
@@ -111,6 +112,38 @@ def gestionar_catalogo(frente_id):
         return redirect(url_for('listar_proyectos'))
     
     return render_template('registro_catalogo.html', frente=frente)
+
+
+@app.route('/empresas')
+def listar_empresas():
+    empresas = Empresa.query.all()
+    return render_template('empresas.html', empresas=empresas)
+
+@app.route('/registro/empresa', methods=['GET', 'POST'])
+def registro_empresas():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        razon_social = request.form['razon']
+        rfc = request.form['rfc']
+        numero_iva = request.form['no_iva']
+        cmic= request.form['cmic']
+
+        empresa = Empresa(nombre=nombre, razon_social=razon_social, rfc=rfc, numero_iva=numero_iva, cmic=cmic)
+        db.session.add(empresa)
+        db.session.commit()
+
+        return redirect(url_for('listar_empresas'))
+
+    return render_template('registro_empresas.html')
+
+
+@app.route('/proyecto/<int:id>/estimacion')
+def estimacion(id):
+    proyecto = Proyecto.query.get(id)
+    frentes = Frente.query.filter_by(proyecto_id=proyecto.id).all()
+    return render_template('estimacion.html', proyecto=proyecto, frentes=frentes)
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000, debug=True)
