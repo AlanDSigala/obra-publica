@@ -50,7 +50,8 @@ def procesarRegistroProyecto():
 @app.route('/registro/frentes')
 def registroFrentes():
     proyectos = db.session.query(Proyecto).all()
-    return render_template('frentes_obra.html', proyectos=proyectos)
+    empresas = db.session.query(Empresa).all()
+    return render_template('frentes_obra.html', proyectos=proyectos, empresas=empresas)
 
 
 @app.route('/proyectos')
@@ -69,9 +70,10 @@ def procesarRegistrarFrentre():
     fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
     no_contrato = request.form.get('no_contrato')
     fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
+    empresa_id = request.form.get('empresa_asociada')
  
     # guardar los datos en la base de datos
-    frente = Frente(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, no_contrato=no_contrato, fecha_final=fecha_final, proyecto_id= proyecto_id)
+    frente = Frente(nombre=nombre, descripcion=descripcion, fecha_inicio=fecha_inicio, no_contrato=no_contrato, fecha_final=fecha_final, proyecto_id= proyecto_id, empresa_id= empresa_id)
     db.session.add(frente)
     db.session.commit()
     return redirect(url_for('gestionar_catalogo', frente_id=frente.id))
@@ -88,8 +90,9 @@ def detalle_frente(proyecto_id, frente_id):
     proyecto = Proyecto.query.get(proyecto_id)
     frente = Frente.query.get(frente_id)
     catalogos = Catalogo.query.filter_by(frente_id=frente_id).all()
+    empresa = Empresa.query.get(frente.empresa_id)  # Obtener la empresa asociada al frente
   
-    return render_template('detalle_frente.html', frente=frente, proyecto=proyecto, catalogos=catalogos)
+    return render_template('detalle_frente.html', frente=frente, proyecto=proyecto, catalogos=catalogos, empresa=empresa)
 
 @app.route('/registro/catalogo/<int:frente_id>', methods=['GET', 'POST'])
 def gestionar_catalogo(frente_id):

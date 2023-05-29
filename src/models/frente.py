@@ -10,3 +10,5 @@ class Frente(db.Model):
     proyecto_id = db.Column(db.Integer, db.ForeignKey('proyecto.id'), nullable=False)
     proyecto = db.relationship('Proyecto', backref=db.backref('frentes', lazy=True))
     catalogos_relacionados = db.relationship('Catalogo', backref='frente', lazy=True)
+    empresa_id = db.Column(db.Integer, db.ForeignKey('empresa.id'), nullable=False)
+    empresa = db.relationship('Empresa', backref=db.backref('frentes', lazy=True))

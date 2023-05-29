@@ -38,6 +38,13 @@
       {% endfor %}
     </select><br>
 
+    <label for="empresa_asociada">Empresa asociada:</label>
+    <select name="empresa_asociada" required>
+      {% for empresa in empresas %}
+        <option value="{{ empresa.id }}">{{ empresa.nombre }}</option>
+      {% endfor %}
+    </select>
+
     <input type="submit" name="accion" value="Registar frente" formaction="/registro/frentes/1">
   </form>
 {% endblock %}

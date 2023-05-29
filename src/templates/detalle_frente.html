@@ -9,6 +9,7 @@
 <p>Fecha final: {{ frente.fecha_final }}</p>
 <p>Numero de contrato: {{ frente.no_contrato}}</p>
 <p>Proyecto asociado: {{ frente.proyecto.nombre }}</p>
+<p>Empresa asociada: {{ frente.empresa.nombre }}</p>
 
 <h2>Catalogo de Conceptos</h2>
 <table class="table">
@@ -38,5 +39,5 @@
     </tbody>
   </table>
 
-<a href="/registro/frentes" class="btn btn-primary">Editar catalogo de Conceptos</a>
+<a href="/registro/catalogo/{{frente.id}}" class="btn btn-primary">Editar catalogo de Conceptos</a>
 {% endblock %}
