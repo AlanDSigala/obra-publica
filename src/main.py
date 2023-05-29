@@ -59,7 +59,7 @@ def listar_proyectos():
     return render_template('proyectos.html', proyectos=proyectos)
 
 
-@app.route('/registro/frentes/1', methods=['POST'])
+@app.route('/registro/frentes/<int:id>', methods=['POST'])
 def procesarRegistrarFrentre():
     proyecto_id = request.form.get('proyecto_id')
     proyecto = Proyecto.query.filter_by(id=proyecto_id).first()
@@ -81,6 +81,35 @@ def detalles_proyecto(id):
     proyecto = Proyecto.query.get(id)
     frentes = Frente.query.filter_by(proyecto_id=proyecto.id).all()
     return render_template('detalle_proyecto.html', proyecto=proyecto, frentes=frentes)
+
+@app.route('/proyecto/editar/<int:id>', methods= ['POST', 'GET'] )
+def editar_proyecto(id):
+    proyecto = Proyecto.query.get(id)
+    if request.method == 'POST':
+        proyecto.nombre = request.form['nombre']
+        proyecto.descripcion= request.form['descripcion']
+        proyecto.fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
+        proyecto.fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
+        db.session.commit()
+        return redirect(url_for('listar_proyectos'))
+    
+    return render_template('edit_proyectos.html',proyecto=proyecto)
+
+@app.route('/proyecto/detalles/<int:id>/frente/<int:proyecto_id>/editar', methods=['POST','GET'])
+def editar_frente(proyecto_id,id):
+    frente = Frente.query.get(proyecto_id)
+    proyecto = Proyecto.query.get(id)
+    if request.method == 'POST':
+        frente.nombre=request.form['nombre']
+        frente.descripcion= request.form['descripcion']
+        frente.fecha_inicio = datetime.strptime(request.form.get('fecha_inicio'), '%Y-%m-%d')
+        frente.no_contrato =request.form['no_contrato']
+        frente.fecha_final = datetime.strptime(request.form.get('fecha_final'), '%Y-%m-%d')
+        db.session.commit()
+        return redirect(url_for('detalles_proyecto',id=id))
+    
+    return render_template('edit_frentes.html',proyecto=proyecto,frente=frente)
+        
 
 
 @app.route('/proyecto/detalles/<int:proyecto_id>/frente/<int:frente_id>')
@@ -136,6 +165,20 @@ def registro_empresas():
 
     return render_template('registro_empresas.html')
 
+@app.route('/empresas/editar/<int:id>', methods=['GET', 'POST'])
+def editar_empresa(id):
+    empresa = Empresa.query.get(id)
+    if request.method == 'POST':
+        empresa.nombre=request.form['nombre']
+        empresa.razon_social = request.form['razon']
+        empresa.rfc = request.form['rfc']
+        empresa.numero_iva = request.form['no_iva']
+        empresa.cmic= request.form['cmic']
+        db.session.commit()
+        return redirect(url_for('listar_empresas'))
+    
+    return render_template('edit_empresas.html',empresa=empresa)
+    
 
 @app.route('/proyecto/<int:id>/estimacion')
 def estimacion(id):

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro Frentes de obra{% endblock %}
+
+{% block content %}
+<h1>Editar:</h1>
+<form action="/proyecto/editar/{{proyecto.id}}" method="POST">
+    <div class="form-group">
+      <label for="nombre">Nombre del proyecto:</label>
+      <input type="text" id="nombre" name="nombre" class="form-control" required value="{{proyecto.nombre}}"/>
+    </div>
+  
+    <div class="form-group">
+      <label for="descripcion">Descripción del proyecto:</label>
+      <textarea  id="descripcion" name="descripcion" class="form-control" required>{{proyecto.descripcion}}</textarea>
+    </div>
+  
+    <div class="form-group">
+      <label for="fecha_inicio">Fecha de inicio:</label>
+      <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" required value="{{ proyecto.fecha_inicio.strftime('%Y-%m-%d') if proyecto.fecha_inicio else '' }}">
+    </div>
+  
+    <div class="form-group">
+      <label for="fecha_final">Fecha de fin:</label>
+      <input type="date" id="fecha_final" name="fecha_final" class="form-control" required value="{{proyecto.fecha_final.strftime('%Y-%m-%d') if proyecto.fecha_final else ''}}">
+    </div>
+
+    <input type="submit" name="accion" value="Actualizar proyecto">
+  </form>
+  {% endblock %}
+  
