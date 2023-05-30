@@ -61,7 +61,7 @@ def listar_proyectos():
 
 
 @app.route('/registro/frentes/<int:id>', methods=['POST'])
-def procesarRegistrarFrentre():
+def procesarRegistrarFrentre(id):
     proyecto_id = request.form.get('proyecto_id')
     proyecto = Proyecto.query.filter_by(id=proyecto_id).first()
 
