@@ -1,12 +1,13 @@
-{% extends 'base.html' %}
-
-{% block title %}Estimacion de proyecto{% endblock %}
-
+{% extends 'base.html' %} {% block title %}Estimacion de proyecto{% endblock %}
 {% block content %}
-<table class="table table-bordered">
+
+<form action="/proyecto/{{proyecto.id}}/frente/{{frente.id}}/estimacion" method="POST">
+  <table class="table table-bordered">
     <tr>
       <td colspan="3">
-        <h2>NOMBRE DE LA DEPENDENCIA RESPONSABLE DEL PROYECTO DE INFRAESTRUCTURA</h2>
+        <h2>
+          NOMBRE DE LA DEPENDENCIA RESPONSABLE DEL PROYECTO DE INFRAESTRUCTURA: {{frente.empresa.nombre}}
+        </h2>
       </td>
       <td>
         <h2>HOJA 1 DE 1</h2>
@@ -15,31 +16,53 @@
     </tr>
   </table>
   
-    <table class="table table-bordered">
-      <tr>
-        <th>CONTRATO</th>
-        <th>CONTRATISTA</th>
-        <th>ESTIMACIÓN</th>
-      </tr>
-      <tr>
-        <td>NÚMERO DEL CONTRATO:</td>
-        <td>xxxx</td>
-        <td>RAZON SOCIAL:</td>
-        <td>RAZON SOCIAL</td>
-        <td>NÚMERO:</td>
-        <td>01(UNO)</td>
-      </tr>
-      <tr>
-        <td>FECHA DEL CONTRATO:</td>
-        <td>28 DE FEBRERO DEL 2023</td>
-        <td>REGISTRO FEDERAL DE CONTRIBUYENTES (RFC):</td>
-        <td>RFC</td>
-        <td>PERIODO:</td>
-        <td>DEL 1 AL 31 DE MARZO DEL 2023</td>
-      </tr>
-    </table>
-    
-    <table class="table table-bordered">
+  <table class="table table-bordered">
+    <tr>
+      <th>CONTRATO</th>
+      <th>CONTRATISTA</th>
+      <th>ESTIMACIÓN</th>
+    </tr>
+    <tr>
+      <td>NÚMERO DEL CONTRATO:</td>
+      <td>xxxx</td>
+      <td>RAZON SOCIAL:</td>
+      <td>RAZON SOCIAL</td>
+      <td>NÚMERO:</td>
+      <td>
+        <div class="form-group">
+          <label for="numero_estimacion">Numero de Estimacion:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="numero_estimacion"
+            name="numero_estimacion"
+            required
+          />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>FECHA DEL CONTRATO:</td>
+      <td>28 DE FEBRERO DEL 2023</td>
+      <td>REGISTRO FEDERAL DE CONTRIBUYENTES (RFC):</td>
+      <td>RFC</td>
+      <td>PERIODO:</td>
+      <td>
+        <div class="form-group">
+          <label for="periodo">Numero de Estimacion:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="periodo"
+            name="periodo"
+            required
+          />
+        </div>
+      </td>
+    </tr>
+  </table>
+  
+  <table class="table table-bordered">
     <tr>
       <th>IMPORTES SIN INCLUIR I.V.A.</th>
       <th>IMPORTE</th>
@@ -57,7 +80,18 @@
     </tr>
     <tr>
       <td>IMPORTE DE LA ESTIMACIÓN ACTUAL:</td>
-      <td>$1,395,996.60</td>
+      <td>
+        <div class="form-group">
+          <label for="importe_estimado_actual">Importe Estimado Actual:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="importe_estimado_actual"
+            name="importe_estimado_actual"
+            required
+          />
+        </div>
+      </td>
       <td>1.19314%</td>
     </tr>
     <tr>
@@ -71,6 +105,6 @@
       <td>98.8069%</td>
     </tr>
   </table>
+</form>
 
 {% endblock %}
-

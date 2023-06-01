@@ -2,6 +2,7 @@ from models.empresa import Empresa
 from models.proyecto import Proyecto
 from models.frente import Frente
 from models.catalogo import Catalogo
+from models.estimacion import Estimacion
 from flask import Flask, render_template, request, redirect, session, url_for
 from database import db
 from datetime import datetime
@@ -184,38 +185,40 @@ def editar_empresa(id):
     return render_template('edit_empresas.html',empresa=empresa)
     
 
-"""@app.route('/proyecto/<int:proyecto_id>/frente/<int:frente_id>/estimacion')
+@app.route('/proyecto/<int:proyecto_id>/frente/<int:frente_id>/estimacion', methods =['GET','POST'])
 def estimacion(proyecto_id, frente_id):
     proyecto = db.session.query(Proyecto).get(proyecto_id)
     frente = db.session.query(Frente).get(frente_id)
 
-    estimacion_anterior = Estimacion.query.filter_by(frente_id=frente_id).order_by(Estimacion.fecha.desc()).first()
+    estimacion_anterior = db.session.query(Estimacion).filter_by(frente_id=frente_id).order_by(Estimacion.fecha.desc()).first()
     
     if estimacion_anterior:
+
         # Obtener los datos de la estimación anterior
+        importe_contrato = estimacion_anterior.importe_contrato
         importe_estimado_anterior = estimacion_anterior.importe_estimado_acumulado_actual
-        # ... otros datos
+        importe_estimado_actual = float(request.form['importe_estimado_actual'])
+        importe_estimado_acum_actual = importe_estimado_acum_actual
+        saldo_por_estimar = estimacion_anterior.saldo_por_estimar
         
         # Realizar los cálculos para los nuevos valores
         importe_contrato = frente.importe_contrato  # Ejemplo de importe del contrato obtenido del frente
         saldo_por_estimar = importe_contrato - importe_estimado_anterior
         # ... otros cálculos
         
-        return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_anterior,
-                               importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar)
-    else:
+        return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_anterior,importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar)
+    #else:
         # No hay estimación anterior, obtener datos del frente y calcular valores
         
         # Realizar los cálculos iniciales
-        importe_contrato = frente.importe_contrato  # Ejemplo de importe del contrato obtenido del frente
-        importe_estimado_anterior = 0
-        saldo_por_estimar = importe_contrato - importe_estimado_anterior
+        #importe_contrato = frente.importe_contrato  # Ejemplo de importe del contrato obtenido del frente
+        #importe_estimado_anterior = 0
+        #saldo_por_estimar = importe_contrato - importe_estimado_anterior
         # ... otros cálculos
         
-        return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_anterior,
-                               importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar)
-    return render_template('estimacion.html', proyecto=proyecto, frente=frente)
-"""
+        #return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_anterior,importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar)
+    #return render_template('estimacion.html', proyecto=proyecto, frente=frente)
+
 
 
 if __name__ == "__main__":
