@@ -181,6 +181,15 @@ def editar_empresa(id):
         return redirect(url_for('listar_empresas'))
     
     return render_template('edit_empresas.html',empresa=empresa)
+
+@app.route('/proyectos/eliminar/<int:id>')
+def eliminar_proyecto(id):
+    proyecto = Proyecto.query.get(id)
+    db.session.delete(proyecto)
+    db.session.commit()
+
+    return redirect(url_for('listar_proyectos'))
+    
     
 
 @app.route('/proyecto/<int:id>/estimacion')
