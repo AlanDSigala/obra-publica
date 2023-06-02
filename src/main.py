@@ -5,7 +5,7 @@ from models.catalogo import Catalogo
 from models.estimacion import Estimacion
 from flask import Flask, render_template, request, redirect, session, url_for
 from database import db
-from datetime import datetime
+from datetime import datetime, date
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///obra.db'
@@ -185,30 +185,55 @@ def editar_empresa(id):
     return render_template('edit_empresas.html',empresa=empresa)
     
 
-@app.route('/proyecto/<int:proyecto_id>/frente/<int:frente_id>/estimacion', methods =['GET','POST'])
+@app.route('/proyecto/<int:proyecto_id>/frente/<int:frente_id>/estimacion', methods=['GET', 'POST'])
 def estimacion(proyecto_id, frente_id):
     proyecto = db.session.query(Proyecto).get(proyecto_id)
     frente = db.session.query(Frente).get(frente_id)
     estimacion_anterior = db.session.query(Estimacion).filter_by(frente_id=frente_id).order_by(Estimacion.fecha.desc()).first()
-    
+
     if estimacion_anterior:
         # Datos de la carátula de estimación
         nombre_empresa = frente.empresa.nombre
         numero_contrato = frente.no_contrato
         fecha_contrato = frente.fecha_inicio
         razon_social = frente.empresa.razon_social
+        fecha = date.today()
 
         # Obtener los datos de la estimación anterior
         importe_contrato = estimacion_anterior.importe_contrato
         importe_estimado_acumulado_anterior = estimacion_anterior.importe_estimado_acumulado_actual
-        importe_estimado_actual = float(request.form['importe_estimado_actual'])
+
+        if request.method == 'POST':
+            importe_estimado_actual = float(request.form['importe_estimado_actual'])
+            numero_estimacion = request.form['numero_estimacion']
+            periodo = request.form['periodo']
+        else:
+            importe_estimado_actual = 0
+
         importe_estimado_acum_actual = importe_estimado_acumulado_anterior + importe_estimado_actual
         saldo_por_estimar = importe_contrato - importe_estimado_acum_actual
 
-        return render_template('estimacion.html', frente=frente, importe_estimado_acumulado_anterior=importe_estimado_acumulado_anterior,
+        estimacion = Estimacion(
+            numero_estimacion=numero_estimacion,
+            fecha=fecha,
+            importe_contrato=importe_contrato,
+            importe_estimado_acum_anterior=importe_estimado_acumulado_anterior,
+            importe_estimado_actual=importe_estimado_actual,
+            importe_estimado_acum_actual=importe_estimado_acum_actual,
+            saldo_por_estimar=saldo_por_estimar,
+            numero_contrato=numero_contrato,
+            razon_social=razon_social,
+            periodo=periodo,
+            frente=frente)
+
+        db.session.add(estimacion)
+        db.session.commit()
+
+        return render_template('estimacion.html', frente=frente, proyecto=proyecto,
+                               importe_estimado_acumulado_anterior=importe_estimado_acumulado_anterior,
                                importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar,
                                nombre_empresa=nombre_empresa, numero_contrato=numero_contrato,
-                               fecha_contrato=fecha_contrato, razon_social=razon_social)
+                               fecha_contrato=fecha_contrato, razon_social=razon_social, fecha=fecha)
     else:
         # No hay estimación anterior, obtener datos del frente y calcular valores
 
@@ -217,6 +242,7 @@ def estimacion(proyecto_id, frente_id):
         numero_contrato = frente.no_contrato
         fecha_contrato = frente.fecha_inicio
         razon_social = frente.empresa.razon_social
+        fecha = date.today()
 
         # Realizar los cálculos iniciales
         importe_contrato = 0
@@ -225,14 +251,40 @@ def estimacion(proyecto_id, frente_id):
             importe_contrato += concepto.importe
 
         importe_estimado_acumulado_anterior = 0
-        importe_estimado_actual = float(request.form['importe_estimado_actual'])
-        importe_estimado_acum_actual = importe_estimado_actual
-        saldo_por_estimar = importe_contrato - importe_estimado_actual
+        numero_estimacion = 0 
+        periodo="000"
 
-        return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_acumulado_anterior,
+        if request.method == 'POST':
+            importe_estimado_actual = float(request.form['importe_estimado_actual'])
+            numero_estimacion = request.form['numero_estimacion']
+            periodo = request.form['periodo']
+            importe_estimado_acum_actual = importe_estimado_actual + importe_estimado_acumulado_anterior
+            saldo_por_estimar = importe_contrato - importe_estimado_acum_actual
+        else:
+            importe_estimado_actual = 0
+            importe_estimado_acum_actual = importe_estimado_actual + importe_estimado_acumulado_anterior
+            saldo_por_estimar = importe_contrato - importe_estimado_actual
+
+        estimacion = Estimacion(
+            numero_estimacion=numero_estimacion,
+            fecha=fecha,
+            importe_contrato=importe_contrato,
+            importe_estimado_acum_anterior=importe_estimado_acumulado_anterior,
+            importe_estimado_actual=importe_estimado_actual,
+            importe_estimado_acum_actual=importe_estimado_acum_actual,
+            saldo_por_estimar=saldo_por_estimar,
+            numero_contrato=numero_contrato,
+            razon_social=razon_social,
+            periodo=periodo,
+            frente=frente)
+
+        return render_template('estimacion.html', frente=frente, proyecto=proyecto,
+                               importe_estimado_acumulado_anterior=importe_estimado_acumulado_anterior,
                                importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar,
                                nombre_empresa=nombre_empresa, numero_contrato=numero_contrato,
-                               fecha_contrato=fecha_contrato, razon_social=razon_social)
+                               fecha_contrato=fecha_contrato, razon_social=razon_social,
+                               importe_estimado_acum_actual=importe_estimado_acum_actual, fecha=fecha)
+
 
 
 

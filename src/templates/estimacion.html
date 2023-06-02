@@ -4,33 +4,33 @@
 <form action="/proyecto/{{proyecto.id}}/frente/{{frente.id}}/estimacion" method="POST">
   <table class="table table-bordered">
     <tr>
-      <td colspan="3">
+      <td colspan="2">
         <h2>
-          NOMBRE DE LA DEPENDENCIA RESPONSABLE DEL PROYECTO DE INFRAESTRUCTURA: {{frente.empresa.nombre}}
+          NOMBRE DE LA DEPENDENCIA RESPONSABLE DEL PROYECTO DE INFRAESTRUCTURA:
         </h2>
       </td>
       <td>
-        <h2>HOJA 1 DE 1</h2>
-        <h2>FECHA: 1 DE ABRIL DEL 2023</h2>
+        <h2> {{frente.empresa.nombre}}</h2>
       </td>
+      <td>FECHA: {{fecha}}</td>
     </tr>
+
   </table>
   
   <table class="table table-bordered">
     <tr>
-      <th>CONTRATO</th>
-      <th>CONTRATISTA</th>
-      <th>ESTIMACIÓN</th>
+      <th colspan="2" class="text-center">CONTRATO</th>
+      <th colspan="2" class="text-center">CONTRATISTA</th>
+      <th colspan="2" class="text-center">ESTIMACIÓN</th>
     </tr>
     <tr>
       <td>NÚMERO DEL CONTRATO:</td>
-      <td>xxxx</td>
+      <td>{{frente.no_contrato}}</td>
       <td>RAZON SOCIAL:</td>
-      <td>RAZON SOCIAL</td>
+      <td>{{razon_social}}</td>
       <td>NÚMERO:</td>
       <td>
         <div class="form-group">
-          <label for="numero_estimacion">Numero de Estimacion:</label>
           <input
             type="number"
             class="form-control"
@@ -43,9 +43,9 @@
     </tr>
     <tr>
       <td>FECHA DEL CONTRATO:</td>
-      <td>28 DE FEBRERO DEL 2023</td>
+      <td>{{frente.fecha_inicio}}</td>
       <td>REGISTRO FEDERAL DE CONTRIBUYENTES (RFC):</td>
-      <td>RFC</td>
+      <td>{{frente.empresa.rfc}}</td>
       <td>PERIODO:</td>
       <td>
         <div class="form-group">
@@ -70,19 +70,18 @@
     </tr>
     <tr>
       <td>IMPORTE DEL CONTRATO:</td>
-      <td>$117,002,140.71</td>
+      <td>${{importe_contrato}}</td>
       <td>100.0000%</td>
     </tr>
     <tr>
       <td>IMPORTE ESTIMADO ACUMULADO ANTERIOR:</td>
-      <td>$-</td>
+      <td>${{importe_estimado_acumulado_anterior}}</td>
       <td>0.00000%</td>
     </tr>
     <tr>
       <td>IMPORTE DE LA ESTIMACIÓN ACTUAL:</td>
       <td>
         <div class="form-group">
-          <label for="importe_estimado_actual">Importe Estimado Actual:</label>
           <input
             type="number"
             class="form-control"
@@ -96,12 +95,12 @@
     </tr>
     <tr>
       <td>IMPORTE ESTIMADO ACUMULADO ACTUAL:</td>
-      <td>$1,395,996.60</td>
+      <td>${{importe_estimado_acum_actual}}</td>
       <td>1.19314%</td>
     </tr>
     <tr>
       <td>SALDO POR ESTIMAR</td>
-      <td>$115,606,144.11</td>
+      <td>${{saldo_por_estimar}}</td>
       <td>98.8069%</td>
     </tr>
   </table>
