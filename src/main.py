@@ -189,35 +189,51 @@ def editar_empresa(id):
 def estimacion(proyecto_id, frente_id):
     proyecto = db.session.query(Proyecto).get(proyecto_id)
     frente = db.session.query(Frente).get(frente_id)
-
     estimacion_anterior = db.session.query(Estimacion).filter_by(frente_id=frente_id).order_by(Estimacion.fecha.desc()).first()
     
     if estimacion_anterior:
+        # Datos de la carátula de estimación
+        nombre_empresa = frente.empresa.nombre
+        numero_contrato = frente.no_contrato
+        fecha_contrato = frente.fecha_inicio
+        razon_social = frente.empresa.razon_social
 
         # Obtener los datos de la estimación anterior
         importe_contrato = estimacion_anterior.importe_contrato
-        importe_estimado_anterior = estimacion_anterior.importe_estimado_acumulado_actual
+        importe_estimado_acumulado_anterior = estimacion_anterior.importe_estimado_acumulado_actual
         importe_estimado_actual = float(request.form['importe_estimado_actual'])
-        importe_estimado_acum_actual = importe_estimado_acum_actual
-        saldo_por_estimar = estimacion_anterior.saldo_por_estimar
-        
-        # Realizar los cálculos para los nuevos valores
-        importe_contrato = frente.importe_contrato  # Ejemplo de importe del contrato obtenido del frente
-        saldo_por_estimar = importe_contrato - importe_estimado_anterior
-        # ... otros cálculos
-        
-        return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_anterior,importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar)
-    #else:
+        importe_estimado_acum_actual = importe_estimado_acumulado_anterior + importe_estimado_actual
+        saldo_por_estimar = importe_contrato - importe_estimado_acum_actual
+
+        return render_template('estimacion.html', frente=frente, importe_estimado_acumulado_anterior=importe_estimado_acumulado_anterior,
+                               importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar,
+                               nombre_empresa=nombre_empresa, numero_contrato=numero_contrato,
+                               fecha_contrato=fecha_contrato, razon_social=razon_social)
+    else:
         # No hay estimación anterior, obtener datos del frente y calcular valores
-        
+
+        # Datos de la carátula de estimación
+        nombre_empresa = frente.empresa.nombre
+        numero_contrato = frente.no_contrato
+        fecha_contrato = frente.fecha_inicio
+        razon_social = frente.empresa.razon_social
+
         # Realizar los cálculos iniciales
-        #importe_contrato = frente.importe_contrato  # Ejemplo de importe del contrato obtenido del frente
-        #importe_estimado_anterior = 0
-        #saldo_por_estimar = importe_contrato - importe_estimado_anterior
-        # ... otros cálculos
-        
-        #return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_anterior,importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar)
-    #return render_template('estimacion.html', proyecto=proyecto, frente=frente)
+        importe_contrato = 0
+
+        for concepto in frente.catalogos_relacionados:
+            importe_contrato += concepto.importe
+
+        importe_estimado_acumulado_anterior = 0
+        importe_estimado_actual = float(request.form['importe_estimado_actual'])
+        importe_estimado_acum_actual = importe_estimado_actual
+        saldo_por_estimar = importe_contrato - importe_estimado_actual
+
+        return render_template('estimacion.html', frente=frente, importe_estimado_anterior=importe_estimado_acumulado_anterior,
+                               importe_contrato=importe_contrato, saldo_por_estimar=saldo_por_estimar,
+                               nombre_empresa=nombre_empresa, numero_contrato=numero_contrato,
+                               fecha_contrato=fecha_contrato, razon_social=razon_social)
+
 
 
 
