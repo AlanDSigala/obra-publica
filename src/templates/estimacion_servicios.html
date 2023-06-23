@@ -1,81 +1,129 @@
-{% extends 'base.html' %}{% block title %}Estimacion de servicios ejecutados{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Estimación de servicios ejecutados{% endblock %}
 {% block content %}
 
-<style>
-  #estimationTable {
-    width: 100%;
-    height: 300px;
-  }
-</style>
-
-<form action="/proyecto/{{proyecto.id}}/frente/{{frente.id}}/estimacion/servicios" method="POST">
-  <div id="estimationTable"></div>
-  <button type="button" onclick="addRow()">+</button>
-  <br><br>
-  <input type="submit" value="Registrar Estimación">
-</form>
-
 <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hyperformula@1.3.0/dist/hyperformula.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 
+<h1>Estimación de Servicios Ejecutados</h1>
+<br>
+<div>
+  <label for="searchInput">Búsqueda:</label>
+  <input type="text" id="searchInput">
+  <button id="searchButton">Buscar</button>
+  <button id="showAllButton">Mostrar todo</button>
+  <button id="addRowButton">+</button>
+  <button id="removeRowButton">-</button>
+</div>
+<br>
+<div id="hot"></div>
+<br>
+<div id="total">Total Importe: $0.00</div>
 <script>
-  function addRow() {
-    var hot = document.querySelector('#estimationTable').hotInstance;
-    hot.alter('insert_row', hot.countRows());
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('hot');
+    var hot;
+    var data = [];
+    var columns = [
+      { type: 'numeric', allowInvalid: false }, // Concepto Num.
+      { type: 'text', allowInvalid: false }, // Clave Con.
+      { type: 'text', allowInvalid: false }, // Concepto de Obra
+      { type: 'text', allowInvalid: false }, // Unidad
+      { type: 'numeric', allowInvalid: false }, // Según Proyecto
+      { type: 'numeric', allowInvalid: false }, // Hasta Estimación Anterior
+      { type: 'numeric', allowInvalid: false }, // De Esta Estimación
+      { type: 'numeric', allowInvalid: false }, // Total Estimado
+      { type: 'numeric', allowInvalid: false }, // Por Ejecutar (calculated)
+      { type: 'numeric', allowInvalid: false }, // Precio Unitario
+      { type: 'numeric', allowInvalid: false } // Importe (calculated)
+    ];
+    var colHeaders = ['Concepto Num.', 'Clave Con.', 'Concepto de Obra', 'Unidad', 'Según Proyecto', 'Hasta Estimación Anterior', 'De Esta Estimación', 'Total Estimado', 'Por Ejecutar', 'Precio Unitario', 'Importe'];
 
-  function calculateImporte() {
-    var hot = document.querySelector('#estimationTable').hotInstance;
-    var data = hot.getData();
-    var importeTotal = 0;
+    data.push(['', '', '', '', '', '', '', '', '', '', '']);
 
-    for (var i = 0; i < data.length; i++) {
-      var deEstaEstimacion = parseFloat(data[i][7]);
-      var precioUnitario = parseFloat(data[i][9]);
-      var importe = deEstaEstimacion * precioUnitario;
-
-      if (!isNaN(importe)) {
-        hot.setDataAtCell(i, 10, importe);
-        importeTotal += importe;
+    function calculateTotal() {
+      var data = hot.getSourceData();
+      var total = 0;
+      for (var i = 0; i < data.length; i++) {
+        total += parseFloat(data[i][10]);
+      }
+      if (total != 0) {
+        document.getElementById('total').textContent = 'Total Importe: ' + formatCurrency(total);
+      } else {
+        document.getElementById('total').textContent = 'Total Importe: $0.00';
       }
     }
 
-    document.getElementById('importeTotal').innerText = importeTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  }
+    function formatCurrency(value) {
+      return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
 
-  var container = document.getElementById('estimationTable');
-  var hot = new Handsontable(container, {
-	licenseKey: 'non-commercial-and-evaluation'
-    data: [[]],
-    rowHeaders: true,
-    colHeaders: [
-      'Concepto Num.', 'Clave Con.', 'Concepto de Obra', 'Cantidades de Obra', 'Unidad',
-      'Según Proyecto', 'Hasta Estimación Anterior', 'De Esta Estimación', 'Total Estimado',
-      'Por Ejecutar', 'Precio Unitario', 'Importe'
-    ],
-    columns: [
-      { type: 'numeric' }, // Concepto Num.
-      { type: 'text' },    // Clave Con.
-      { type: 'text' },    // Concepto de Obra
-      { type: 'text' },    // Cantidades de Obra
-      { type: 'text' },    // Unidad
-      { type: 'numeric' }, // Según Proyecto
-      { type: 'numeric' }, // Hasta Estimación Anterior
-      { type: 'numeric' }, // De Esta Estimación
-      { type: 'numeric' }, // Total Estimado
-      { type: 'numeric' }, // Por Ejecutar
-      { type: 'numeric' }, // Precio Unitario
-      { type: 'numeric' }  // Importe
-    ],
-    colWidths: [100, 100, 200, 200, 100, 150, 200, 200, 150, 150, 150, 150],
-    columnSorting: true,
-    autoWrapRow: true,
-    afterChange: calculateImporte
+    function filteredData(searchQuery) {
+      var filteredData = [];
+      for (var i = 0; i < data.length; i++) {
+        for (var j = 0; j < data[i].length; j++) {
+          if (data[i][j].toString().toLowerCase().includes(searchQuery.toLowerCase())) {
+            filteredData.push(data[i]);
+            break;
+          }
+        }
+      }
+      return filteredData;
+    }
+
+    function loadData(filteredData) {
+      if (!hot) {
+        hot = new Handsontable(container, {
+          licenseKey: 'non-commercial-and-evaluation',
+          data: filteredData,
+          rowHeaders: true,
+          colHeaders: colHeaders,
+          columns: columns,
+          columnSorting: true,
+          afterChange: function(changes, source) {
+            if (source !== 'loadData') {
+              // Recalculate 'Por Ejecutar' and 'Importe' columns
+              var data = hot.getSourceData();
+              for (var i = 0; i < data.length; i++) {
+                var segunProyecto = parseFloat(data[i][4]);
+                var totalEstimado = parseFloat(data[i][7]);
+                data[i][8] = segunProyecto - totalEstimado; // Por Ejecutar
+
+                var deEstaEstimacion = parseFloat(data[i][6]);
+                var precioUnitario = parseFloat(data[i][9]);
+                data[i][10] = deEstaEstimacion * precioUnitario; // Importe
+              }
+              hot.render();
+              calculateTotal();
+            }
+          }
+        });
+      } else {
+        hot.loadData(filteredData);
+      }
+    }
+
+    document.getElementById("searchButton").addEventListener("click", function() {
+      var searchQuery = document.getElementById("searchInput").value;
+      var filteredData = filteredData(searchQuery);
+      loadData(filteredData);
+    });
+
+    document.getElementById("showAllButton").addEventListener("click", function() {
+      loadData(data);
+    });
+
+    document.getElementById("addRowButton").addEventListener("click", function() {
+      hot.alter("insert_row");
+    });
+
+    document.getElementById("removeRowButton").addEventListener("click", function() {
+      hot.alter("remove_row");
+    });
+
+    loadData(data);
   });
-
-  calculateImporte();
 </script>
-
-<p>Total Importe: <span id="importeTotal"></span></p>
 
 {% endblock %}
