@@ -1,0 +1,81 @@
+{% extends 'base.html' %}{% block title %}Estimacion de servicios ejecutados{% endblock %}
+{% block content %}
+
+<style>
+  #estimationTable {
+    width: 100%;
+    height: 300px;
+  }
+</style>
+
+<form action="/proyecto/{{proyecto.id}}/frente/{{frente.id}}/estimacion/servicios" method="POST">
+  <div id="estimationTable"></div>
+  <button type="button" onclick="addRow()">+</button>
+  <br><br>
+  <input type="submit" value="Registrar Estimación">
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+
+<script>
+  function addRow() {
+    var hot = document.querySelector('#estimationTable').hotInstance;
+    hot.alter('insert_row', hot.countRows());
+  }
+
+  function calculateImporte() {
+    var hot = document.querySelector('#estimationTable').hotInstance;
+    var data = hot.getData();
+    var importeTotal = 0;
+
+    for (var i = 0; i < data.length; i++) {
+      var deEstaEstimacion = parseFloat(data[i][7]);
+      var precioUnitario = parseFloat(data[i][9]);
+      var importe = deEstaEstimacion * precioUnitario;
+
+      if (!isNaN(importe)) {
+        hot.setDataAtCell(i, 10, importe);
+        importeTotal += importe;
+      }
+    }
+
+    document.getElementById('importeTotal').innerText = importeTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  }
+
+  var container = document.getElementById('estimationTable');
+  var hot = new Handsontable(container, {
+	licenseKey: 'non-commercial-and-evaluation'
+    data: [[]],
+    rowHeaders: true,
+    colHeaders: [
+      'Concepto Num.', 'Clave Con.', 'Concepto de Obra', 'Cantidades de Obra', 'Unidad',
+      'Según Proyecto', 'Hasta Estimación Anterior', 'De Esta Estimación', 'Total Estimado',
+      'Por Ejecutar', 'Precio Unitario', 'Importe'
+    ],
+    columns: [
+      { type: 'numeric' }, // Concepto Num.
+      { type: 'text' },    // Clave Con.
+      { type: 'text' },    // Concepto de Obra
+      { type: 'text' },    // Cantidades de Obra
+      { type: 'text' },    // Unidad
+      { type: 'numeric' }, // Según Proyecto
+      { type: 'numeric' }, // Hasta Estimación Anterior
+      { type: 'numeric' }, // De Esta Estimación
+      { type: 'numeric' }, // Total Estimado
+      { type: 'numeric' }, // Por Ejecutar
+      { type: 'numeric' }, // Precio Unitario
+      { type: 'numeric' }  // Importe
+    ],
+    colWidths: [100, 100, 200, 200, 100, 150, 200, 200, 150, 150, 150, 150],
+    columnSorting: true,
+    autoWrapRow: true,
+    afterChange: calculateImporte
+  });
+
+  calculateImporte();
+</script>
+
+<p>Total Importe: <span id="importeTotal"></span></p>
+
+{% endblock %}

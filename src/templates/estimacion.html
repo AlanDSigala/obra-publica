@@ -26,7 +26,7 @@
     <tr>
       <td>NÚMERO DEL CONTRATO:</td>
       <td>{{frente.no_contrato}}</td>
-      <td>RAZON SOCIAL:</td>
+      <td>RAZÓN SOCIAL:</td>
       <td>{{razon_social}}</td>
       <td>NÚMERO:</td>
       <td>
@@ -79,7 +79,7 @@
       <td>0.00000%</td>
     </tr>
     <tr>
-      <td>IMPORTE DE LA ESTIMACIÓN ACTUAL:</td>
+      <td>IMPORTE DE LA ESTIMACIÓN ACTUAL:</td> //Se debe regresar el total del importe
       <td>
         <div class="form-group">
           <input
@@ -104,7 +104,9 @@
       <td>98.8069%</td>
     </tr>
   </table>
-  <button type="submit">Registrar Estimacion</button>
+  <button type="submit">Registrar Estimación</button>
 </form>
-
+<form action="/proyecto/{{proyecto.id}}/frente/{{frente.id}}/estimacion/" method="POST">
+  <button type="submit">Agregar la Estimación de Servicios Ejecutados</button>
+</form>
 {% endblock %}
