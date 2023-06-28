@@ -6,13 +6,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 
 <h1>Estimación de Servicios Ejecutados</h1>
-<div id="demo">
-  [
-  {% for concepto in frente.catalogos_relacionados%}
-    '{{ concepto.clave }}' ,
-  {% endfor %}
-  ]
-</div>
 <script>const demo = document.getElementById('demo'); demo.style.display = 'none' </script>
 <br>
 <div>
@@ -36,7 +29,7 @@
     var columns = [
       { 
         type: 'dropdown', 
-        source: ['{% for concepto in frente.catalogos_relacionados %}{{concepto.clave}}{% endfor %}'],
+        source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.clave}}',{% endfor %}],
         allowHtml: true,
         allowInvalid: false 
       }, // Clave Con.
