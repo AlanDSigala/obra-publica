@@ -285,12 +285,17 @@ def estimacion(proyecto_id, frente_id):
                                fecha_contrato=fecha_contrato, razon_social=razon_social,
                                importe_estimado_acum_actual=importe_estimado_acum_actual, fecha=fecha)
 
-@app.route('/proyecto/<int:proyecto_id>/frente/<int:frente_id>/estimacion/estimacion_servicios')
+@app.route('/proyecto/<int:proyecto_id>/frente/<int:frente_id>/estimacion/estimacion_servicios', methods=['GET','POST'])
 def estimacion_servicios(proyecto_id, frente_id):
     proyecto = db.session.query(Proyecto).get(proyecto_id)
     frente = Frente.query.get(frente_id)
     catalogo = Catalogo.query.filter_by(frente_id=frente_id).first()
-    return render_template('estimacion_servicios.html', proyecto=proyecto, frente=frente, catalogo=catalogo)
+    
+    for concepto in frente.catalogos_relacionados:
+            concepto.clave = concepto.clave
+    
+
+    return render_template('estimacion_servicios.html', proyecto=proyecto, frente=frente, catalogo=catalogo, concepto=concepto)
 
 
 

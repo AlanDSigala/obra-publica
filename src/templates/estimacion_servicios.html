@@ -6,6 +6,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 
 <h1>Estimación de Servicios Ejecutados</h1>
+<div id="demo">
+  [
+  {% for concepto in frente.catalogos_relacionados%}
+    '{{ concepto.clave }}' ,
+  {% endfor %}
+  ]
+</div>
+<script>const demo = document.getElementById('demo'); demo.style.display = 'none' </script>
 <br>
 <div>
   <label for="searchInput">Búsqueda:</label>
@@ -19,13 +27,19 @@
 <div id="hot"></div>
 <br>
 <div id="total">Total Importe: $0.00</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var container = document.getElementById('hot');
     var hot;
     var data = [];
     var columns = [
-      { type: 'text', allowInvalid: false }, // Clave Con.
+      { 
+        type: 'dropdown', 
+        source: ['{% for concepto in frente.catalogos_relacionados %}{{concepto.clave}}{% endfor %}'],
+        allowHtml: true,
+        allowInvalid: false 
+      }, // Clave Con.
       { type: 'text', allowInvalid: false }, // Concepto de Obra
       { type: 'text', allowInvalid: false }, // Unidad
       { type: 'numeric', allowInvalid: false }, // Según Proyecto
