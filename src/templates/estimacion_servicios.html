@@ -37,14 +37,14 @@
       { type: 'numeric', allowInvalid: false }, // Según Proyecto
       { type: 'numeric', allowInvalid: false }, // Hasta Estimación Anterior
       { type: 'numeric', allowInvalid: false }, // De Esta Estimación
-      { type: 'numeric', allowInvalid: false }, // Total Estimado
-      { type: 'numeric', allowInvalid: false }, // Por Ejecutar (calculated)
+      { type: 'numeric', allowInvalid: false, readOnly: true, renderer: totalEstimadoRenderer }, // Total Estimado (calculated)
+      { type: 'numeric', allowInvalid: false, readOnly: true, renderer: porEjecutarRenderer }, // Por Ejecutar (calculated)
       { type: 'autocomplete', strict: 'false', filter: 'false', numericFormat: formatMX, source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.costo_unitario}}',{% endfor %}], allowHtml: true, allowInvalid: false }, // Precio Unitario
-      { type: 'numeric', numericFormat: formatMX} // Importe (calculated)
+      { type: 'numeric', numericFormat: formatMX, readOnly: true, renderer: importeRenderer } // Importe (calculated)
     ];
     var colHeaders = ['Clave Con.', 'Concepto de Obra', 'Unidad', 'Según Proyecto', 'Hasta Estimación Anterior', 'De Esta Estimación', 'Total Estimado', 'Por Ejecutar', 'Precio Unitario', 'Importe'];
 
-    data.push(['', '', '', '', '', '', '', '', '', '']);
+    data.push(['', '', '', '', '', '', 0, 0, '', 0]);
 
     function calculateTotal() {
       var data = hot.getSourceData();
@@ -106,6 +106,33 @@
       } else {
         hot.loadData(filteredData);
       }
+    }
+
+    function totalEstimadoRenderer(instance, td, row, col, prop, value, cellProperties) {
+      Handsontable.renderers.TextRenderer.apply(this, arguments);
+      var hastaEstimacionAnterior = parseFloat(data[row][4]);
+      var deEstaEstimacion = parseFloat(data[row][5]);
+      var totalEstimado = hastaEstimacionAnterior + deEstaEstimacion;
+      td.innerHTML = parseFloat(totalEstimado);
+      data[row][6] = totalEstimado; // Update the value in the data array
+    }
+
+    function porEjecutarRenderer(instance, td, row, col, prop, value, cellProperties) {
+      Handsontable.renderers.TextRenderer.apply(this, arguments);
+      var segunProyecto = parseFloat(data[row][3]);
+      var totalEstimado = parseFloat(data[row][6]);
+      var porEjecutar = segunProyecto - totalEstimado;
+      td.innerHTML = parseFloat(porEjecutar);
+      data[row][7] = porEjecutar; // Update the value in the data array
+    }
+
+    function importeRenderer(instance, td, row, col, prop, value, cellProperties) {
+      Handsontable.renderers.TextRenderer.apply(this, arguments);
+      var precioUnitario = parseFloat(data[row][8]);
+      var deEstaEstimacion = parseFloat(data[row][5]);
+      var importe = precioUnitario * deEstaEstimacion;
+      td.innerHTML = formatCurrency(importe);
+      data[row][9] = importe; // Update the value in the data array
     }
 
     document.getElementById("searchButton").addEventListener("click", function() {
