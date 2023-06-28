@@ -63,7 +63,7 @@
       return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
-    function filteredData(searchQuery) {
+    function filterData(searchQuery) {
       var filteredData = [];
       for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data[i].length; j++) {
@@ -137,7 +137,7 @@
 
     document.getElementById("searchButton").addEventListener("click", function() {
       var searchQuery = document.getElementById("searchInput").value;
-      var filteredData = filteredData(searchQuery);
+      var filteredData = filterData(searchQuery);
       loadData(filteredData);
     });
 

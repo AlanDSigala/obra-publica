@@ -21,7 +21,7 @@ def index():
 
 @app.route('/registro')
 def registro():
-    return render_template('formulario_proyecto.html ')
+    return render_template('formulario_proyecto.html')
 
 @app.route('/consultar', methods=['POST'])
 def consultar():
