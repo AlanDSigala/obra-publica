@@ -106,7 +106,5 @@
   </table>
   <button type="submit">Registrar Estimación</button>
 </form>
-<form action="/proyecto/{{proyecto.id}}/frente/{{frente.id}}/estimacion/" method="POST">
-  <button type="submit">Agregar la Estimación de Servicios Ejecutados</button>
-</form>
+  <a href="{{ url_for('estimacion_servicios', proyecto_id=proyecto.id, frente_id=frente.id) }}" class="btn btn-primary">Agregar la Estimación de Servicios Ejecutados</a>
 {% endblock %}

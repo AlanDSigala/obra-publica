@@ -3,13 +3,13 @@
 {% block title %}Proyecto{% endblock %}
 
 {% block content %}
-<h1>Registro o consulta de Proyecto</h1>
+<h1>Registro o Consulta de Proyecto</h1>
 
 <form method="POST">
   <label for="txtNombre">¿Qué desea hacer?</label>
   <br>
-  <input type="submit" name="accion" value="registrar" formaction="{{ url_for('registroProyecto') }}">
-  <input type="submit" name="accion" value="consultar" formaction="{{ url_for('consultar') }}">
+  <input type="submit" name="accion" value="Registrar" formaction="{{ url_for('registroProyecto') }}">
+  <input type="submit" name="accion" value="Consultar" formaction="{{ url_for('consultar') }}">
   <br>
 </form>
 {% endblock %}
