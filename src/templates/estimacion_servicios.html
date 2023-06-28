@@ -3,6 +3,7 @@
 {% block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/numbro@2.3.6/dist/numbro.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 
 <h1>Estimación de Servicios Ejecutados</h1>
@@ -23,25 +24,24 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    const formatMX = {
+      pattern: '0,0.00 $',
+      culture: 'en-US',
+    };
     var container = document.getElementById('hot');
     var hot;
     var data = [];
     var columns = [
-      { 
-        type: 'dropdown', 
-        source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.clave}}',{% endfor %}],
-        allowHtml: true,
-        allowInvalid: false 
-      }, // Clave Con.
-      { type: 'text', allowInvalid: false }, // Concepto de Obra
-      { type: 'text', allowInvalid: false }, // Unidad
+      { type: 'dropdown', source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.clave}}',{% endfor %}], allowHtml: true, allowInvalid: false }, // Clave Con.
+      { type: 'dropdown', source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.descripcion}}',{% endfor %}], allowHtml: true,  allowInvalid: false }, // Concepto de Obra
+      { type: 'dropdown', source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.unidad}}',{% endfor %}], allowHtml: true,  allowInvalid: false }, // Unidad
       { type: 'numeric', allowInvalid: false }, // Según Proyecto
       { type: 'numeric', allowInvalid: false }, // Hasta Estimación Anterior
       { type: 'numeric', allowInvalid: false }, // De Esta Estimación
       { type: 'numeric', allowInvalid: false }, // Total Estimado
       { type: 'numeric', allowInvalid: false }, // Por Ejecutar (calculated)
-      { type: 'numeric', format: '$0,0.00', allowInvalid: false }, // Precio Unitario
-      { type: 'numeric', format: '$0,0.00', allowInvalid: false } // Importe (calculated)
+      { type: 'autocomplete', strict: 'false', filter: 'false', numericFormat: formatMX, source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.costo_unitario}}',{% endfor %}], allowHtml: true, allowInvalid: false }, // Precio Unitario
+      { type: 'numeric', numericFormat: formatMX, allowInvalid: false } // Importe (calculated)
     ];
     var colHeaders = ['Clave Con.', 'Concepto de Obra', 'Unidad', 'Según Proyecto', 'Hasta Estimación Anterior', 'De Esta Estimación', 'Total Estimado', 'Por Ejecutar', 'Precio Unitario', 'Importe'];
 
