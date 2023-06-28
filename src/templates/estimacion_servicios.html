@@ -7,15 +7,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 
 <h1>Estimación de Servicios Ejecutados</h1>
-<script>const demo = document.getElementById('demo'); demo.style.display = 'none' </script>
 <br>
 <div>
   <label for="searchInput">Búsqueda:</label>
   <input type="text" id="searchInput">
-  <button id="searchButton">Buscar</button>
-  <button id="showAllButton">Mostrar todo</button>
-  <button id="addRowButton">+</button>
-  <button id="removeRowButton">-</button>
+  <a href="#" class="btn btn-primary" id="searchButton">Buscar</a>
+  <a href="#" class="btn btn-primary" id="showAllButton">Mostrar todo</a>
+  <a href="#" class="btn btn-primary" id="addRowButton">+</a>
+  <a href="#" class="btn btn-primary" id="removeRowButton">-</a>
 </div>
 <br>
 <div id="hot"></div>
@@ -41,7 +40,7 @@
       { type: 'numeric', allowInvalid: false }, // Total Estimado
       { type: 'numeric', allowInvalid: false }, // Por Ejecutar (calculated)
       { type: 'autocomplete', strict: 'false', filter: 'false', numericFormat: formatMX, source: [{% for concepto in frente.catalogos_relacionados %}'{{concepto.costo_unitario}}',{% endfor %}], allowHtml: true, allowInvalid: false }, // Precio Unitario
-      { type: 'numeric', numericFormat: formatMX, allowInvalid: false } // Importe (calculated)
+      { type: 'numeric', numericFormat: formatMX} // Importe (calculated)
     ];
     var colHeaders = ['Clave Con.', 'Concepto de Obra', 'Unidad', 'Según Proyecto', 'Hasta Estimación Anterior', 'De Esta Estimación', 'Total Estimado', 'Por Ejecutar', 'Precio Unitario', 'Importe'];
 
@@ -51,7 +50,7 @@
       var data = hot.getSourceData();
       var total = 0;
       for (var i = 0; i < data.length; i++) {
-        total += parseFloat(data[i][10]);
+        total += parseFloat(data[i][9]);
       }
       if (total != 0) {
         document.getElementById('total').textContent = 'Total Importe: ' + formatCurrency(total);
@@ -91,13 +90,13 @@
               // Recalculate 'Por Ejecutar' and 'Importe' columns
               var data = hot.getSourceData();
               for (var i = 0; i < data.length; i++) {
-                var segunProyecto = parseFloat(data[i][4]);
-                var totalEstimado = parseFloat(data[i][7]);
-                data[i][8] = segunProyecto - totalEstimado; // Por Ejecutar
+                var segunProyecto = parseFloat(data[i][3]);
+                var totalEstimado = parseFloat(data[i][6]);
+                data[i][7] = segunProyecto - totalEstimado; // Por Ejecutar
 
-                var deEstaEstimacion = parseFloat(data[i][6]);
-                var precioUnitario = parseFloat(data[i][9]);
-                data[i][10] = deEstaEstimacion * precioUnitario; // Importe
+                var deEstaEstimacion = parseFloat(data[i][5]);
+                var precioUnitario = parseFloat(data[i][8]);
+                data[i][9] = deEstaEstimacion * precioUnitario; // Importe
               }
               hot.render();
               calculateTotal();
