@@ -8,6 +8,7 @@ from database import db
 from datetime import datetime, date
 
 app = Flask(__name__)
+app.config.from_object('config.DevelopmentConfig')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///obra.db'
 with app.app_context():
     db.init_app(app)
